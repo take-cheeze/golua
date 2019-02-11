@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"io/ioutil"
 	"os"
+	"os/exec"
+	"syscall"
 	"time"
 
 	"github.com/Azure/golua/lua"
@@ -99,8 +101,33 @@ func osDiffTime(state *lua.State) int {
 //
 // See https://www.lua.org/manual/5.3/manual.html#pdf-os.execute
 func osExecute(state *lua.State) int {
-	unimplemented("os.execute")
-	return 0
+	cmdStr := state.OptString(1, "")
+	if len(cmdStr) == 0 {
+		state.Push(true)
+		return 1
+	}
+
+	os.Stderr.Write([]byte("test\n"))
+
+	cmd := exec.Command("sh", "-c", cmdStr)
+	err := cmd.Run()
+	if err != nil {
+		state.Push(nil)
+		exitStatus := cmd.ProcessState.Sys().(*syscall.WaitStatus)
+		if exitStatus.Signaled() {
+			state.Push("signal")
+			state.Push(int(exitStatus.Signal()))
+		} else {
+			state.Push("exit")
+			state.Push(exitStatus.ExitStatus())
+		}
+	} else {
+		state.Push(true)
+		state.Push("exit")
+		state.Push(0)
+	}
+
+	return 1
 }
 
 // os.exit ([code [, close]])

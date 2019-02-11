@@ -182,6 +182,7 @@ dofile('math.lua')
 dofile('bitwise.lua')
 --assert(dofile('verybig.lua', true) == 10); collectgarbage()
 dofile('files.lua')
+dofile('os.lua')
 
 if #msgs > 0 then
  print("\ntests not performed:")
