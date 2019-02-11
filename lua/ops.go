@@ -383,7 +383,7 @@ func (state *State) arith(op Op, x, y Value) Value {
 				panic(fmt.Errorf("attempt to divide by zero"))
 			}
 			if n == -1 {
-				return m
+				return -m
 			}
 			q := m / n
 			if (m^n) < 0 && m%n != 0 {
