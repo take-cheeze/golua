@@ -4,7 +4,7 @@ set -euxo pipefail
 root_dir="$(cd "${BASH_SOURCE[0]%/*}/.." && pwd)"
 cd "$root_dir"
 
-COMPAT_LUA_VERSION=5.3.4
+COMPAT_LUA_VERSION=5.3.5
 
 if [ $(uname -s) = 'Linux' ] ; then
     wget --continue "https://www.lua.org/ftp/lua-${COMPAT_LUA_VERSION}.tar.gz"
